@@ -104,10 +104,11 @@ class Home extends CI_Controller {
 
 						$data['result'] .= $rs->fields;					
 						$data['result'] .= $rs->primarykey;					
-						$data['result'] .= $rs->otherkey;					
-						$data['result'] .= $rs->table;					
+						$data['result'] .= $rs->table;										
+						$data['result'] .= $rs->otherkey;
 						$data['result'] .= '$this->dbforge->create_table("'.$tb.'");';
 						$data['result'] .= "\r\n";
+						// $data['result'] .= $rs->otherkey;
 						$data['result'] .= "}";
 						$data['result'] .= "\r\n";
 					}
@@ -158,7 +159,7 @@ class Home extends CI_Controller {
 		              );
 
 		$backup =& $this->dbutil->backup($prefs); 
-
+		// var_dump($backup);
 		$file = $backup;
 
 		$fields     = '';
@@ -176,26 +177,70 @@ class Home extends CI_Controller {
 		// echo "<br/>";
 
 		$contents = explode("\n",$file);
+		$fields = array();
+		$primarykeys = array();
+		$otherkeys = array();
+
+		/* GET KEYS AND SAVE TO AN ARRAY */
+		foreach ($contents as $key=>$line) {
+
+			$line = trim($line);
+
+			// get fields
+			if (preg_match('/^`(.*?)`\s(.*?),$/i',$line,$aMatch)) {
+				$fields[] = $aMatch[1];
+			}
+
+			// get primary keys
+			if (preg_match('/PRIMARY\sKEY\s+\(\`(.*?)\`\)/i',$line,$primary)) {
+				$primarykeys[] = $primary[1];
+			}
+
+			//get other keys
+			if (preg_match('/KEY\s\`(.*?)\`/i',$line,$indexkey)) {
+				$otherkeys[] = $indexkey[1];
+			}
+		}
+
 		foreach ($contents as $key=>$line) {
 
 			$line = trim($line);
 
 			if (preg_match('/CREATE\sTABLE\sIF\sNOT\sEXISTS\s\`(.*?)\`/i',$line,$tablematch))
 			{
-				$rs->table .= '$this->dbforge->create_table('."'".$tablematch[1]."'".');'.PHP_EOL;
-				continue;
+				// $rs->table .= '$this->dbforge->create_table('."'".$tablematch[1]."'".');'.PHP_EOL;
+				// continue;
 			}
 
+			// check fiels
 			if (preg_match('/^`(.*?)`\s(.*?),$/i',$line,$aMatch)) {
-				$rs->fields .='$this->dbforge->add_field("'.$aMatch[1].' '.$aMatch[2].'");'.PHP_EOL;;
+				if (in_array($aMatch[1], $fields)) {
+					$rs->fields .='$this->dbforge->add_field("`'.$aMatch[1].'` '.$aMatch[2].'");'.PHP_EOL;
+				}
 			}
 
 			// lets get our keys and such!
 			if (preg_match('/PRIMARY\sKEY\s+\(\`(.*?)\`\)/i',$line,$primary)) {
-				$rs->primarykey .= '$this->dbforge->add_key('."'".$primary[1]."'".', TRUE);'.PHP_EOL;
+
+				if (in_array($primary[1], $fields)) {
+					$rs->primarykey .= '$this->dbforge->add_key('."'`".$primary[1]."`'".', TRUE);'.PHP_EOL;
+				}
 			}
+
+
+			//Adding this key turns to be an error
+			//update to index key instead
+			//sly : update
 			if (preg_match('/KEY\s\`(.*?)\`/i',$line,$indexkey)) {
-				$rs->otherkey .= '$this->dbforge->add_key('."'".$indexkey[1]."'".');'.PHP_EOL;
+				var_dump($indexkey);
+				if (in_array($indexkey[1], $fields)) {
+					// var_dump($indexkey[1]);
+					// var_dump($fields);
+					// die();
+					$rs->otherkey .= '$this->dbforge->add_key('."'`".$indexkey[1]."`'".');'.PHP_EOL;
+					// $rs->otherkey .= '$sql = "CREATE INDEX `'.$indexkey[1].'` ON `'.$tablename.'`(`'.$indexkey[1].'`)";'.PHP_EOL;
+					// $rs->otherkey .= '$this->db->query($sql);'.PHP_EOL;
+				}
 			}
 		}
 

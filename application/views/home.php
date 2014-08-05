@@ -8,11 +8,11 @@
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+	<!-- Latest compiled and minified JavaScript -->
+	<!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
 
 	<style>
 		textarea {
@@ -63,14 +63,16 @@
 		    		<tr>
 		    			<td>
 		    				<?if($tables):?>
-		    					<button onclick="check_all()" >Check All</button>
-		    					<button onclick="uncheck_all()">Un-check All</button>
+		    					<button onclick="check_all(event)" >Check All</button>
+		    					<button onclick="uncheck_all(event)">Un-check All</button>
 		    					<script>
-		    					function check_all(){
+		    					function check_all(e){
 		    						 $(".cb_tables").prop("checked", true);
+		    						 e.preventDefault();
 		    					}
-		    					function uncheck_all(){
+		    					function uncheck_all(e){
 		    						 $(".cb_tables").prop("checked", false);
+		    						 e.preventDefault();
 		    					}
 		    					</script>
 								<?foreach ($tables as $key => $tb): ?>
