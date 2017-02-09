@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '1234asdf';
-$db['default']['database'] = 'ub_online';
+$db['default']['hostname'] = isset($_GET['host']) ? $_GET['host'] : 'localhost';
+$db['default']['username'] = isset($_GET['root']) ? $_GET['root'] : 'root';
+$db['default']['password'] = isset($_GET['pass']) ? $_GET['pass'] : '1234asdf';
+$db['default']['database'] = isset($_GET['db']) ? $_GET['db'] : 'ci_system';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
