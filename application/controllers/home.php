@@ -79,18 +79,18 @@ class Home extends CI_Controller {
 			}
 		}
 
-		if($this->input->post('show_on_page')){
+		if($this->input->get('show_on_page')){
 
-			if($this->input->post('tables')){
+			if($this->input->get('tables')){
 
-				$tables = $this->input->post('tables');
+				$tables = $this->input->get('tables');
 
-				if($this->input->post('add_class_name')){
-					$data['result'] .= 'class Migration_'.$this->input->post('class_name').' extends CI_Migration {';
+				if($this->input->get('add_class_name')){
+					$data['result'] .= 'class Migration_'.$this->input->get('class_name').' extends CI_Migration {';
 					$data['result'] .= "\r\n";
 				}
 
-				if($this->input->post('add_up')){
+				if($this->input->get('add_up')){
 
 					$data['result'] .= 'public function up(){';
 					$data['result'] .= "\r\n";
@@ -116,7 +116,7 @@ class Home extends CI_Controller {
 					$data['result'] .= "}";
 				}
 
-				if($this->input->post('add_down')){
+				if($this->input->get('add_down')){
 
 					$data['result'] .= "\r\n";
 					$data['result'] .= 'public function down(){';
@@ -137,7 +137,7 @@ class Home extends CI_Controller {
 					$data['result'] .= "}";
 				}
 
-				if($this->input->post('add_class_name')){
+				if($this->input->get('add_class_name')){
 					$data['result'] .= "\r\n";
 					$data['result'] .= "}";
 				}
@@ -232,7 +232,6 @@ class Home extends CI_Controller {
 			//update to index key instead
 			//sly : update
 			if (preg_match('/KEY\s\`(.*?)\`/i',$line,$indexkey)) {
-				var_dump($indexkey);
 				if (in_array($indexkey[1], $fields)) {
 					// var_dump($indexkey[1]);
 					// var_dump($fields);

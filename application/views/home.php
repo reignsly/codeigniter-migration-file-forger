@@ -3,7 +3,7 @@
 <head>
 	<title>Codeigniter Migration Forger</title>
 	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link href="<?php echo base_url('assets/css/bootstrap.default.min.css'); ?>" rel="stylesheet" type="text/css" media="screen" />
 
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -37,7 +37,11 @@
 		    </div>
 		</nav>
 		
-		<?=form_open('');?>
+		<?=form_open('',' class="form-horizontal" method="GET"');?>
+		
+		<?=$this->load->view('_db_form')?>
+
+		<hr>
 
 		<?if($result):?>
 			<div class="row">

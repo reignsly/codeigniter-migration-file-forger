@@ -72,9 +72,20 @@
 	<div id="body">
 		<p>To use this Codeigniter application please set your database connection first.</p>
 		
-		<code>application/config/database.php</code>
+		<?=form_open('home', ' method="GET"')?>
 
-		<p>After configuring the database, you can continue here <a href="<?=base_url('home')?>">Continue</a>.</p>
+		<?=$this->load->view('_db_form')?>
+		<p></p>
+		<!-- Button -->
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="singlebutton"></label>
+		  <div class="col-md-4">
+		    <button id="singlebutton" name="singlebutton" class="btn btn-primary">Go</button>
+		  </div>
+		</div>
+
+		</form>
+
 	</div>
 
 	<p class="footer">Creator <strong>{reignsly}</strong></p>
